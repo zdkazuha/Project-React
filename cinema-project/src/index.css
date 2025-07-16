@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.Layout {
+  min-height: 100vh;
+}
+
+.WebText {
+    font-size: 18px;
+    position: relative;
+    left: -25px;
+}
+
