@@ -3,6 +3,28 @@ body {
   padding: 0;
 }
 
+/* Home  */
+
+.weclome {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 20px;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.rating {
+    color: gold;
+    padding-left: 90px;
+}
+
+/* Layout  */
+
 .Layout {
   min-height: 100vh;
 }
@@ -13,3 +35,39 @@ body {
     left: -25px;
 }
 
+/* Movie Page */
+
+.movie-page {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+}
+
+.poster {
+    width: 275px;
+    height: 425px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.movie-details {
+    max-width: 600px;
+    font-size: 18px;
+}
+
+.movie-details h1 {
+    margin-top: -8px;
+}
+
+.add-favorite {
+    position: absolute;
+    left: 1280px;
+}
+
+.video-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;   
+  margin-top: 20px;   
+}

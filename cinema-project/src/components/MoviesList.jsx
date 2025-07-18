@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Table, Tag , Popconfirm , message  } from 'antd';
+import { Button, Space, Table, Tag , Popconfirm } from 'antd';
 import { useMessage } from '../hooks/useMessage';
 import Link from 'antd/es/typography/Link';
 
@@ -43,7 +43,7 @@ const getColumns = (genres, DeleteMovies) => [
       title: 'Rating',
       dataIndex: 'vote_average',
       key: 'rating',
-      render: text => <span>{text.toFixed(1)}</span>,
+      render: text => <span style={{color: "gold"}}>⭐{text.toFixed(1)}</span>,
     },
     {
       title: 'Release date',
@@ -53,21 +53,21 @@ const getColumns = (genres, DeleteMovies) => [
     },
     {
       title: 'Actions',
-//    dataIndex: 'Actions',
       key: 'actions',
       render: (_, record) => (
         <Space size="middle">
-            <Button type="primary">Add to Favorites</Button>
+            <Link href={`movie_page/${record.id}`}>
+                <Button type="primary">Details</Button>
+            </Link>
             
-            <Link href={`/movies_page`}>
-                <Button type="default">Details</Button>
+            <Link href={`/edit/${record.id}`}>
+                <Button type="default">Edit</Button>
             </Link>
 
             <Popconfirm
                 title="Delete the task"
                 description={`Are you sure to delete ${record.title}?`}
                 onConfirm={() => DeleteMovies(record.id, record.title)}
-                // onCancel={cancel}
                 okText="Yes"
                 cancelText="No"
             >
@@ -92,6 +92,7 @@ const MoviesList = () => {
     const response = await fetch(api);
     const data = await response.json();
     setMovies(data.results);
+    console.log(data.results);
   }
 
   async function fetchMoviesGenre() {
