@@ -9,7 +9,7 @@ export default function FavoritePage () {
     useEffect(() => {
         const storedMovies = JSON.parse(localStorage.getItem('key')) || [];
         if (storedMovies.length > 0) {
-            showSuccess("Your favorite movies loaded successfully!");
+            showSuccess("Your favorite movies loaded successfullyq!");
             alert(storedMovies);
         }
     }, []);
