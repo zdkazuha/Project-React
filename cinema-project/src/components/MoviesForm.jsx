@@ -155,7 +155,7 @@ const MoviesForm = () => {
       <Form.Item style={{ marginLeft: '100px' }}>
         <Space>
           <Button type="primary" htmlType="submit" icon={<PlusOutlined />} size="large">
-            {editMode ? "Add Movie" : "Edit Movie"}
+            {editMode ? "Edit Movie" : "Add Movie"}
           </Button>
           <Button type="default" size="large" onClick={onCancel}>
             Cancel

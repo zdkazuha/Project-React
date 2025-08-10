@@ -72,7 +72,7 @@ const Layout = () => {
             <Content className='Content' style={{ padding: '0 12px ' }}>
                 <Breadcrumb
                     style={{ margin: '16px 0' }}
-                    items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
+                    items={[{ title: 'Home' }, { title: location.pathname.slice(1,location.pathname.length) }]}
                 />
                 <div
                     style={{

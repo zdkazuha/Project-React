@@ -13,7 +13,7 @@ export default function Home() {
     async function fetchMovies() {
         const response = await fetch(api);
         const data = await response.json();
-        setMovies(data.results.slice(0,14));
+        setMovies(data.results.slice(0,18));
     }
 
     return (

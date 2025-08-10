@@ -18,6 +18,12 @@ body {
   gap: 20px;
 }
 
+.card-img {
+  width: 100%;
+  height: 350px;
+  border-radius: 10px;
+}
+
 .rating {
     color: gold;
     padding-left: 90px;
@@ -60,8 +66,14 @@ body {
 }
 
 .add-favorite {
-    position: absolute;
-    left: 1280px;
+    position: relative;
+    width: 220px;
+}
+
+.added-favorites {
+    position: relative;
+    width: 220px;
+    background-color: lightgray;
 }
 
 .video-container {
@@ -70,4 +82,25 @@ body {
   justify-content: center; 
   align-items: center;   
   margin-top: 20px;   
+}
+
+/* Favorite Movie Page */
+
+#favorite-movie {
+  text-align: center;
+  font-size: 36px;
+}
+
+/* Search Movie Page */
+
+.movie-search-form{
+  margin-bottom: 60px;
+}
+
+.movies-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
 }

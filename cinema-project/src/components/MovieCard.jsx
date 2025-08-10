@@ -1,22 +1,23 @@
 import React from 'react';
 import { Button, Card } from 'antd';
 import Link from 'antd/es/typography/Link';
+import noImage from '../img/glitch-error-404-page-background_23-2148072534.avif';
 const { Meta } = Card;
 
 export default function MovieCard({ movie }) {
   const { id, poster_path, title, vote_average, overview } = movie;
-
+  console.log(poster_path);
   return (
     <Card
       hoverable
       style={{ width: 240 }}
-      cover={<img alt={title} src={`https://image.tmdb.org/t/p/w200${poster_path}`} />}
+      cover={<img className='card-img' alt={title} src={ poster_path === null ? noImage : `https://image.tmdb.org/t/p/w200${poster_path}`} />}
     >
       <Meta
         title={title}
         description={
           <>
-            <span className='rating'>{vote_average.toFixed(1)}</span>
+            <span className='rating'>{vote_average !== undefined  ? vote_average.toFixed(1) : 0}</span>
             <br />
             <div style={{ maxHeight: '100px', overflow: 'auto', textOverflow: 'ellipsis' }}>
               {overview}
