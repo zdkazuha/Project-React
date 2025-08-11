@@ -29,7 +29,11 @@ const LoginForm = () => {
     <Form.Item
       label="Username"
       name="username"
-      rules={[{ required: true, message: 'Please input your username!' }]}
+      rules={[
+        { required: true, message: 'Please enter your username.!' },
+        { min: 8, message: 'The username must be at least 8 characters long!' },
+        { max: 20, message: 'The username must be no longer than 20 characters!' },
+    ]}
     >
       <Input />
     </Form.Item>
@@ -37,14 +41,19 @@ const LoginForm = () => {
     <Form.Item
       label="Password"
       name="password"
-      rules={[{ required: true, message: 'Please input your password!' }]}
+      rules={[
+        { required: true, message: 'Please enter your password.!' },
+        { min: 8, message: 'The password must be at least 8 characters long!' },
+        { max: 20, message: 'The password must be no longer than 20 characters!' },
+        { pattern: /^[A-Z](?=.*\d).+$/, message: 'The password must start with a capital letter and contain at least one digit.' },
+    ]}
     >
       <Input.Password />
     </Form.Item>
 
-    <Form.Item name="remember" valuePropName="checked" label={null}>
+    {/* <Form.Item name="remember" valuePropName="checked" label={null}>
       <Checkbox>Remember me</Checkbox>
-    </Form.Item>
+    </Form.Item> */}
 
     <Form.Item label={null}>
       <Button type="primary" htmlType="submit">

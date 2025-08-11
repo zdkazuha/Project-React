@@ -65,13 +65,15 @@ body {
     margin-top: -8px;
 }
 
-.add-favorite {
-    position: relative;
+.add-favorites {
+    position: absolute;
+    Left: 1570px;
     width: 220px;
 }
 
 .added-favorites {
-    position: relative;
+    position: absolute;
+    Left: 1570px;
     width: 220px;
     background-color: lightgray;
 }
