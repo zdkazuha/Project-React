@@ -9,6 +9,9 @@ import FavoritePage from './components/FavoritesPage'
 import MovieSearchPage from './components/MovieSearchPage'
 import NoPage from './components/NoPage' 
 import './App.css'
+import LoginForm from './components/LoginForm'
+import LogoutPage from './components/LogoutPage'
+import SessionsPage from './components/SessionsPage'
 
 function App() {
 
@@ -25,6 +28,9 @@ function App() {
           <Route path="movie_page/:id" element={<MoviesPage />} />
           <Route path="favorite_page" element={<FavoritePage />} />
           <Route path="search_page" element={<MovieSearchPage />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="logout" element={<LogoutPage />} />
+          <Route path="sessions_page" element={<SessionsPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

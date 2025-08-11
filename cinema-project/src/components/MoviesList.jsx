@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Space, Table, Tag , Popconfirm } from 'antd';
 import { useMessage } from '../hooks/useMessage';
 import Link from 'antd/es/typography/Link';
+import { useToast } from '../contexts/toast.context';
 
 const api = 'https://api.themoviedb.org/3/movie/popular?api_key=b507e73c6fb26fa0dcacca602b38a41e&language=en-US&page=1';
 const apiGenre = 'https://api.themoviedb.org/3/genre/movie/list?api_key=b507e73c6fb26fa0dcacca602b38a41e&language=en-US';
@@ -81,7 +82,8 @@ const getColumns = (genres, DeleteMovies) => [
 const MoviesList = () => {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState({});
-  const { contextHolder, showSuccess } = useMessage();
+  const {showToast} = useToast()
+
 
   useEffect(() => {
     fetchMoviesGenre();
@@ -108,14 +110,13 @@ const MoviesList = () => {
   }
 
   function DeleteMovies(id, title) {
-    showSuccess(`Movie with ${title} deleted successfully`);
+    showToast(`Movie with ${title} deleted successfully`, "success");
 
     setMovies(movies.filter(movie => movie.id !== id));
   }
 
   return (
     <>
-        {contextHolder}
       <h2>Movies List</h2>
       <Link href="/create">
         <Button type="primary" style={{ marginBottom: '16px' }}>Create New Movies</Button>

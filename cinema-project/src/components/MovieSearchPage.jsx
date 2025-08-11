@@ -7,17 +7,18 @@ import {
 import { useMessage } from '../hooks/useMessage';
 import MovieCard from './MovieCard';
 import { set } from 'react-hook-form';
+import { useToast } from '../contexts/toast.context';
 
 
 const MovieSearch = () => {
     const apiGenre = 'https://api.themoviedb.org/3/genre/movie/list?api_key=b507e73c6fb26fa0dcacca602b38a41e&language=en-US';
-    const { contextHolder, showSuccess } = useMessage();
     const [filterType, setFilterType] = useState(null);
     const [filter, setFilter] = useState(null);
     const [genres, setGenres] = useState([]);
     const [ratings, setRatings] = useState([]);
     const [years, setYears] = useState([]);
     const [movies, setMovies] = useState([]);
+    const {showToast} = useToast()
     let arr = [];
 
 
@@ -87,14 +88,13 @@ const MovieSearch = () => {
     }
 
     const SearchMovie = (type) => {
-        showSuccess(`Start Searching movie name ${type.target.value}`)
+        showToast(`Start Searching movie name ${type.target.value}`, "success");
         type.preventDefault();
         fetchMoviesSearch(type.target.value)
     }
 
     return (
         <>
-            {contextHolder}
             <h2>{""}</h2>
             <Form
                 labelCol={{ span: 4 }}

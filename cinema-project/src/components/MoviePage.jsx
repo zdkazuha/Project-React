@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { useMessage } from '../hooks/useMessage';
+import { useToast } from '../contexts/toast.context';
 
 export default function MoviesPage() {
-    const { contextHolder, showSuccess, showError } = useMessage();
     const [movie, setMovie] = useState(null);
     const [video, setVideo] = useState(null);
     const [flag, setFlag] = useState(false);
+    const {showToast} = useToast()
     const { id } = useParams();
 
 
@@ -17,7 +17,6 @@ export default function MoviesPage() {
             const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=b507e73c6fb26fa0dcacca602b38a41e&language=en-US`);
             const data = await response.json();
             setMovie(data);
-            console.log(data)
     }
 
     async function loadMovieVideo(id) {
@@ -33,12 +32,12 @@ export default function MoviesPage() {
     function AddFavorites(id) {
         let id_localStorage = LoadFavorite();
         if(id_localStorage.includes(id)) {
-            showError("This movie has already been added to favorites.");
+            showToast("This movie has already been added to favorites.", "error");
             return;
         }
         
         setFlag(!flag);
-        showSuccess("Movie added to favorites!");
+        showToast("Movie added to favorites!", "success")
 
         id_localStorage.push(id);
         localStorage.setItem('movies_id', JSON.stringify(id_localStorage));
@@ -68,7 +67,6 @@ export default function MoviesPage() {
 
     return (
         <>
-            {contextHolder}
             <div className='movie-page'>
                 <div className="header">
                     <img className="poster" src={ movie.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />

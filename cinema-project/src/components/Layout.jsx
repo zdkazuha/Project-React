@@ -1,72 +1,104 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Breadcrumb, Layout as LayoutAntd, Menu, theme } from 'antd';
 import {
     HomeFilled,
     BarsOutlined,
-    BookOutlined,
     SearchOutlined,
     TrophyOutlined,
+    LoginOutlined,
+    UserOutlined,
+    LogoutOutlined,
+    VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { AccountContext } from '../contexts/account.context';
 
 const { Header, Content, Footer } = LayoutAntd;
 
 const items = [
     {
-        key: '1',
+        key: '/',
         label: <Link to="/">Home</Link>,
         icon: <HomeFilled />
     },
     {
-        key: '2',
+        key: '/movies',
         label: <Link to="/movies">Movies</Link>,
         icon: <BarsOutlined />,
     },
     {
-        key: '3',
+        key: '/sessions_page',
+        label: <Link to="/sessions_page">Sessions</Link>,
+        icon: <VideoCameraOutlined />,
+    },
+    {
+        key: '/favorite_page',
         label: <Link to="/favorite_page">Favorite Movies</Link>,
         icon: <TrophyOutlined />,
     },
     {
-        key: '4',
+        key: '/search_page',
         label: <Link to="/search_page">Search Movies</Link>,
         icon: <SearchOutlined />,
     },
 ]
 
+const annonymoMenuItems = [
+    {
+        key: '/login',
+        label: <Link to="/login">Login</Link>,
+        icon: <LoginOutlined />
+    },
+    {
+        key: '/register',
+        label: <Link to="/register">Register</Link>,
+        icon: <UserOutlined />,
+    }
+]
+
+const accountoMenuItems = [
+    {
+        key: '/logout',
+        label: <Link to="/logout">Logout</Link>,
+        icon: <LogoutOutlined />
+    },
+]
+
+
 const Layout = () => {
+    
+    const location = useLocation();
+    const {email,  isAuth} = useContext(AccountContext);
+    
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const location = useLocation();
-
-    const getSelectedKey = () => {
-        if (location.pathname.includes('/create') || location.pathname.includes('/edit') || location.pathname.includes('/movie_page')) {
-            return '2'; 
-        }
-        if (location.pathname === '/favorite_page') {
-            return '3'; 
-        }
-        if (location.pathname === '/search_page') {
-            return '4'; 
-        }
-        return '1';
-    };
-
     return (
         <LayoutAntd className='Layout'>
-            <Header style={{ display: 'flex', alignItems: 'center' }}>
+            <Header style={{ display: 'flex', alignItems: 'center'}}>
                 <div className='logo'>
                     <h2 className='WebText'>Movies website</h2>
                 </div>
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={[getSelectedKey()]}
+                    defaultSelectedKeys={['1']}
+                    selectedKeys={[location.pathname]}
                     items={items}
-                    style={{ flex: 1, minWidth: 0 }}
+                    style={{ flex: 1, minWidth: 0}}
                 />
+
+                {isAuth() && <span>Hello {email}</span>}
+
+                <Menu
+                    theme="dark"
+                    mode="horizontal"
+                    defaultSelectedKeys={['1']}
+                    selectedKeys={[location.pathname]}
+                    items={isAuth() ? accountoMenuItems : annonymoMenuItems}
+                    style={{ flex: 1, justifyContent: "flex-end" , minWidth: 0 }}
+                    />
             </Header>
 
             <Content className='Content' style={{ padding: '0 12px ' }}>

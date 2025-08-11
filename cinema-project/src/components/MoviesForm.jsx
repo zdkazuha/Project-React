@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import { useMessage } from '../hooks/useMessage';
 import dayjs from 'dayjs';
+import { useToast } from '../contexts/toast.context';
 
 const { TextArea } = Input;
 
@@ -24,6 +25,7 @@ const MoviesForm = () => {
   const [editMode, setEditMode] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const {showToast} = useToast()
   let params = useParams();
   
 
@@ -64,7 +66,8 @@ const MoviesForm = () => {
   }, []);
 
   const onSubmit = async (movie) => {
-    showSuccess(`Movie ${editMode ? 'updated' : 'created'} successfully!`);
+    showToast(`Movie ${editMode ? 'updated' : 'created'} successfully!`, "success");
+
   }
 
   const onCancel = () => {
