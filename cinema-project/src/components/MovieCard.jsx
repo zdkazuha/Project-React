@@ -5,27 +5,32 @@ import noImage from '../img/glitch-error-404-page-background_23-2148072534.avif'
 const { Meta } = Card;
 
 export default function MovieCard({ movie }) {
+
   const { id, poster_path, title, vote_average, overview } = movie;
-  console.log(poster_path);
+
   return (
+
     <Card
       hoverable
-      style={{ width: 240 }}
-      cover={<img className='card-img' alt={title} src={ poster_path === null ? noImage : `https://image.tmdb.org/t/p/w200${poster_path}`} />}
+      className='card'
+      cover={<img style={{ padding: 1, height: 390 }} alt={title} src={poster_path === null ? noImage : `https://image.tmdb.org/t/p/w200${poster_path}`} />}
     >
       <Meta
         title={title}
         description={
           <>
-            <span className='rating'>{vote_average !== undefined  ? vote_average.toFixed(1) : 0}</span>
+            <span className='rating'>{vote_average !== undefined ? vote_average.toFixed(1) : 0}</span>
+            
             <br />
-            <div style={{ maxHeight: '100px', overflow: 'auto', textOverflow: 'ellipsis' }}>
+            
+            <div className='card-description'>
               {overview}
-            </div>      
+            </div>
+
             <Link href={`/movie_page/${id}`}>
-              <Button style={{width: '100%', marginTop: '10px'}} type="primary">Movie Details</Button>
+              <Button className='movie-card-button' type="primary">Movie Details</Button>
             </Link>
-            </>
+          </>
         }
       />
     </Card>

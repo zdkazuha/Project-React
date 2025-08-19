@@ -64,19 +64,18 @@ const accountoMenuItems = [
     },
 ]
 
-
 const Layout = () => {
-    
+
     const location = useLocation();
-    const {email,  isAuth} = useContext(AccountContext);
-    
+    const { email, isAuth } = useContext(AccountContext);
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
     return (
         <LayoutAntd className='Layout'>
-            <Header style={{ display: 'flex', alignItems: 'center'}}>
+            <Header style={{ display: 'flex', alignItems: 'center' }}>
                 <div className='logo'>
                     <h2 className='WebText'>Movies website</h2>
                 </div>
@@ -86,10 +85,10 @@ const Layout = () => {
                     defaultSelectedKeys={['1']}
                     selectedKeys={[location.pathname]}
                     items={items}
-                    style={{ flex: 1, minWidth: 0}}
+                    style={{ flex: 1, minWidth: 0 }}
                 />
 
-                {isAuth() && <span>Hello {email}</span>}
+                {isAuth() && <p>Hello <span className={email === "Admin" ? 'red' : ''} >{email}</span></p>}
 
                 <Menu
                     theme="dark"
@@ -97,14 +96,14 @@ const Layout = () => {
                     defaultSelectedKeys={['1']}
                     selectedKeys={[location.pathname]}
                     items={isAuth() ? accountoMenuItems : annonymoMenuItems}
-                    style={{ flex: 1, justifyContent: "flex-end" , minWidth: 0 }}
-                    />
+                    style={{ flex: 1, justifyContent: "flex-end", minWidth: 0 }}
+                />
             </Header>
 
             <Content className='Content' style={{ padding: '0 12px ' }}>
                 <Breadcrumb
                     style={{ margin: '16px 0' }}
-                    items={[{ title: 'Home' }, { title: location.pathname.slice(1,location.pathname.length) }]}
+                    items={[{ title: 'Home' }, { title: location.pathname.slice(1, location.pathname.length) }]}
                 />
                 <div
                     style={{

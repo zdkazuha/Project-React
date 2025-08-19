@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
+    Col,
     Form,
     Input,
+    Row,
     Select,
 } from 'antd';
-import { useMessage } from '../hooks/useMessage';
 import MovieCard from './MovieCard';
-import { set } from 'react-hook-form';
 import { useToast } from '../contexts/toast.context';
 
 
@@ -18,31 +18,30 @@ const MovieSearch = () => {
     const [ratings, setRatings] = useState([]);
     const [years, setYears] = useState([]);
     const [movies, setMovies] = useState([]);
-    const {showToast} = useToast()
-    let arr = [];
+    const { showToast } = useToast()
 
 
     useEffect(() => {
         fetchMoviesGenre();
 
         const rating = Array.from({ length: 19 }, (_, i) => {
-        const val = 1 + i * 0.5;
-        return { value: val, label: val.toString() };
+            const val = 1 + i * 0.5;
+            return { value: val, label: val.toString() };
         });
         setRatings(rating)
 
         const year = Array.from({ length: 2025 - 2000 + 1 }, (_, i) => 2000 + i)
-        .map(y => ({ value: y, label: y.toString() }));
+            .map(y => ({ value: y, label: y.toString() }));
         setYears(year);
 
     }, []);
-    
+
     const filterTypes = [
         { value: 'genre', label: 'Жанр' },
         { value: 'rating', label: 'Рейтинг' },
         { value: 'year', label: 'Рік' },
     ];
-    
+
     async function fetchMoviesGenre() {
         const response = await fetch(apiGenre);
         const data = await response.json();
@@ -95,13 +94,15 @@ const MovieSearch = () => {
 
     return (
         <>
-            <h2>{""}</h2>
+            <hr />
+            <h1 className='header-text'>Search</h1>
+            <hr style={{ marginBottom: 50 }} />
+
             <Form
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 14 }}
                 layout="horizontal"
-                style={{ maxWidth: 1800 }}
-                className='movie-search-form'
+                style={{ maxWidth: 1800, marginBottom: 60 }}
             >
 
                 <Form.Item
@@ -124,7 +125,7 @@ const MovieSearch = () => {
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 30 }}
                     rules={[{ message: 'Please select a filter type' }]}
-                    style={{ position: 'absolute', left: 1520, top: 160, height: 40, width: 300, fontSize: 24 }}
+                    style={{ position: 'absolute', left: 1520, top: 260, height: 40, width: 300, fontSize: 24 }}
                 >
                     <Select
                         placeholder="Enter Type"
@@ -141,7 +142,7 @@ const MovieSearch = () => {
                     colon={false}
                     labelCol={{ span: 90 }}
                     wrapperCol={{ span: 30 }}
-                    style={{ position: 'absolute', left: 1520, top: 210, height: 40, width: 300, fontSize: 24 }}
+                    style={{ position: 'absolute', left: 1520, top: 310, height: 40, width: 300, fontSize: 24 }}
                 >
                     <Select
                         placeholder={filterType === 'genre' ? "Enter Genre" : filterType === 'rating' ? "Enter Rating" : filterType ?? "Enter Year"}
@@ -153,11 +154,21 @@ const MovieSearch = () => {
                 </Form.Item>
             </Form>
 
-            <hr  />
-            <div className="movies-list">
-            {movies.map(movie => <MovieCard key={movie.id} movie={movie} />)}
-            </div>
+            <hr />
 
+            <div className="movies-search-list" >
+                {
+                    movies.length > 0 ?
+                        <Row gutter={[54.5, 60]}>
+                            {movies.map(movie => (
+                                <Col key={movie.id} span={4}>
+                                    <MovieCard movie={movie} />
+                                </Col>
+                            ))}
+                        </Row>
+                        : <p style={{ fontSize: 36, }}>Start seaching movie</p>
+                }
+            </div>
         </>
     );
 };
