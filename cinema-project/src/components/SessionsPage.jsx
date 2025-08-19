@@ -3,83 +3,9 @@ import { Button, Space, Table, Tag, Popconfirm, Form, Select } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { useToast } from '../contexts/toast.context';
 import { genres, loadSessions } from '../services/MovieSessions';
-import { UpdateSessionLocalStorage } from '../services/Favorite.service';
+import { IsFavoriteSession, UpdateSessionLocalStorage } from '../services/Favorite.service';
 import { set } from 'react-hook-form';
 import { AccountContext } from '../contexts/account.context';
-
-const getColumns = (DeleteSessions, toggleFavoriteSessions, isAdmin) => [
-    {
-        title: 'MovieTitle',
-        dataIndex: 'title',
-        key: 'title',
-    },
-    {
-        title: 'Genre',
-        dataIndex: 'genre',
-        key: 'genre',
-    },
-    {
-        title: 'Duration',
-        dataIndex: 'durationMinutes',
-        key: 'durationMinutes',
-    },
-    {
-        title: 'Rating',
-        dataIndex: 'rating',
-        key: 'rating',
-        render: text => <span style={{ color: "gold" }}>⭐{text}</span>,
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
-    },
-    {
-        title: 'Time',
-        dataIndex: 'time',
-        key: 'time',
-    },
-    {
-        title: 'Hall',
-        dataIndex: 'hall',
-        key: 'hall',
-    },
-    {
-        title: 'Age Rating',
-        dataIndex: 'ageRestriction',
-        key: 'ageRestriction',
-    },
-    {
-        title: 'Price',
-        dataIndex: 'ticketPrice',
-        key: 'ticketPrice',
-    },
-    {
-        title: 'Actions',
-        key: 'actions',
-        render: (_, record) => (
-            <Space size="middle">
-
-                <Button type="primary" onClick={() => toggleFavoriteSessions(record.id)} >Add Favorites</Button>
-
-                <Link href={`edit_sessions/${record.id}`}>
-                    <Button className={isAdmin() ? '' : 'hidden'} type="default">Edit</Button>
-                </Link>
-
-                <Popconfirm
-                    title="Delete the session"
-                    description={`Are you sure to delete the session for ${record.title}?`}
-                    onConfirm={() => DeleteSessions(record.id)}
-                    okText="Yes"
-                    cancelText="No"
-                    className={isAdmin() ? '' : 'hidden'}
-                >
-                    <Button type="primary" danger>Delete</Button>
-                </Popconfirm>
-            </Space>
-        )
-    }
-];
 
 const SessionsPage = () => {
     const [movieSessions, setMovieSessions] = useState(loadSessions());
@@ -87,7 +13,8 @@ const SessionsPage = () => {
     const [filterGenre, setFilterGenre] = useState();
     const [genre, setGenre] = useState(genres);
     const { showToast } = useToast()
-    const { isAdmin } = useContext(AccountContext);
+    const { isAdmin, isAuth, email } = useContext(AccountContext);
+    const [favoriteSessions, setFavoriteSessions] = useState([]);
 
     const DeleteSessions = (id) => {
         const updatedSession = movieSessions.filter(session => session.id !== id);
@@ -96,9 +23,17 @@ const SessionsPage = () => {
     }
 
     const toggleFavoriteSessions = (id) => {
-        UpdateSessionLocalStorage(id);
-        showToast('Session added to favorites successfully', 'success');
+        UpdateSessionLocalStorage(id, isAuth, email);
+
+        setFavoriteSessions(prev =>
+            prev.includes(id)
+                ? prev.filter(favId => favId !== id)
+                : [...prev, id]
+        );
+
+        showToast('Session favorite status updated', 'success');
     }
+
 
     const setFilterOnChange = (value) => {
         setFilter(value);
@@ -110,7 +45,7 @@ const SessionsPage = () => {
 
     useEffect(() => {
         if (filter) {
-            const filteredSessions = loadSessions().filter(session => {
+            const filteredSessions = loadSessions(isAuth, email).filter(session => {
                 if (!filter) return true;
 
                 if (filter === "time") return true;
@@ -130,6 +65,87 @@ const SessionsPage = () => {
         }
     }, [filter, filterGenre]);
 
+    useEffect(() => {
+        const favs = movieSessions
+            .filter(session => IsFavoriteSession(session.id, isAuth, email))
+            .map(s => s.id);
+        setFavoriteSessions(favs);
+    }, [movieSessions]);
+
+    const getColumns = () => [
+        {
+            title: 'MovieTitle',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'Genre',
+            dataIndex: 'genre',
+            key: 'genre',
+        },
+        {
+            title: 'Duration',
+            dataIndex: 'durationMinutes',
+            key: 'durationMinutes',
+        },
+        {
+            title: 'Rating',
+            dataIndex: 'rating',
+            key: 'rating',
+            render: text => <span style={{ color: "gold" }}>⭐{text}</span>,
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+        },
+        {
+            title: 'Time',
+            dataIndex: 'time',
+            key: 'time',
+        },
+        {
+            title: 'Hall',
+            dataIndex: 'hall',
+            key: 'hall',
+        },
+        {
+            title: 'Age Rating',
+            dataIndex: 'ageRestriction',
+            key: 'ageRestriction',
+        },
+        {
+            title: 'Price',
+            dataIndex: 'ticketPrice',
+            key: 'ticketPrice',
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space size="middle">
+
+                    <Button type="primary" className={favoriteSessions.includes(record.id) ? "remove-favorites-sessions" : "add-favorites-sessions"}onClick={() => toggleFavoriteSessions(record.id)} >{favoriteSessions.includes(record.id) ? "Remove from favorites" : "Add to favorites"}</Button>
+
+                    <Link href={`edit_sessions/${record.id}`}>
+                        <Button className={isAdmin() ? '' : 'hidden'} type="default">Edit</Button>
+                    </Link>
+
+                    <Popconfirm
+                        title="Delete the session"
+                        description={`Are you sure to delete the session for ${record.title}?`}
+                        onConfirm={() => DeleteSessions(record.id)}
+                        okText="Yes"
+                        cancelText="No"
+                        className={isAdmin() ? '' : 'hidden'}
+                    >
+                        <Button type="primary" danger>Delete</Button>
+                    </Popconfirm>
+                </Space>
+            )
+        }
+    ];
+
     return (
         <>
             <hr />
@@ -137,7 +153,7 @@ const SessionsPage = () => {
             <hr style={{ marginBottom: 50 }} />
 
             <Link href={`create_sessions`}>
-                <Button type="primary" style={{ marginBottom: 10}}>Create New Sessions</Button>
+                <Button type="primary" style={{ marginBottom: 10 }}>Create New Sessions</Button>
             </Link>
 
             <Form
@@ -198,11 +214,11 @@ const SessionsPage = () => {
                     okText="Yes"
                     cancelText="No"
                 >
-                    <Button style={{ width: 160, marginBottom: 20  }} type='primary' danger>Clear Filter</Button>
+                    <Button style={{ width: 160, marginBottom: 20 }} type='primary' danger>Clear Filter</Button>
                 </Popconfirm>
             </Form>
 
-            <Table columns={getColumns(DeleteSessions, toggleFavoriteSessions, isAdmin)} dataSource={movieSessions} rowKey={i => i.id} />
+            <Table columns={getColumns()} dataSource={movieSessions} rowKey={i => i.id} />
         </>
     );
 };

@@ -1,15 +1,18 @@
 import noImage from '../img/glitch-error-404-page-background_23-2148072534.avif';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { IsFavorite, LoadFavorite, UpdateLocalStorage } from '../services/Favorite.service';
+import { AccountContext } from '../contexts/account.context';
 
 export default function MoviesPage() {
     const [movie, setMovie] = useState(null);
     const [video, setVideo] = useState(null);
     const { id } = useParams();
-    const [isFav, setIsFav] = useState(IsFavorite(id));
+    const { isAuth, email } = useContext(AccountContext);
+    const [isFav, setIsFav] = useState(false);
+
 
     async function loadMovieData(id) {
 
@@ -31,21 +34,20 @@ export default function MoviesPage() {
     }
 
     function toggleFavorite() {
+        UpdateLocalStorage(movie.id, isAuth, email);
 
-        UpdateLocalStorage(movie.id);
+        setIsFav(IsFavorite(movie.id, isAuth, email));
 
-        setIsFav(IsFavorite(movie.id));
     }
 
     useEffect(() => {
-        if (id) {
-
+        if (id && isAuth !== undefined) {
             loadMovieData(id);
             loadMovieVideo(id);
 
-            setIsFav(IsFavorite(id));
+            setIsFav(IsFavorite(id, isAuth, email));
         }
-    }, [id]);
+    }, [id, isAuth, email]);
 
     if (!movie) {
         return <div>No movie data found.</div>;
@@ -64,13 +66,13 @@ export default function MoviesPage() {
                     <p>Overview: {movie.overview}</p>
                     <p>Genres: {movie.genres.map(genre => genre.name).join(", ")}</p>
                     <p>Для: {movie.adult === false ? "дітей та підлітків" : "дорослих"}</p>
-                    <p>Budget: <span className='Green'>{movie.budget === 0 ? "unknown" : movie.budget + "$"}</span></p>
+                    <p>Budget: <span className='green'>{movie.budget === 0 ? "unknown" : movie.budget + "$"}</span></p>
 
                     <hr />
 
                     <p>Release date: {movie.release_date}</p>
                     <p>Vote count: {movie.vote_count}</p>
-                    <p>Rating: <span className='Gold'>⭐{movie.vote_average.toFixed(1)}</span></p>
+                    <p>Rating: <span className='gold'>⭐{movie.vote_average.toFixed(1)}</span></p>
                 </div>
 
                 <Button

@@ -163,6 +163,16 @@ body {
   display: none;
 }
 
+.add-favorites-sessions {
+  width: 160px;
+  background-color: green;
+}
+
+.remove-favorites-sessions {
+  width: 160px;
+  background-color: red;
+}
+
 /* Login Form */
 
 .login-form {

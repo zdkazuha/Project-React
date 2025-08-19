@@ -13,6 +13,7 @@ import LoginForm from './components/LoginForm'
 import LogoutPage from './components/LogoutPage'
 import SessionsPage from './components/SessionsPage'
 import SessionsForm from './components/SessionsForm'
+import RegisterPage from './components/RegisterPage'
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="sessions_page" element={<SessionsPage />} />
             <Route path="create_sessions" element={<SessionsForm />} />
             <Route path="edit_sessions/:id" element={<SessionsForm />} />
+            <Route path="register" element={<RegisterPage />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

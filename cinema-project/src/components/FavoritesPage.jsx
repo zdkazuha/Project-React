@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
 import { LoadFavorite, LoadFavoriteSession } from "../services/Favorite.service";
 import { loadSessions } from "../services/MovieSessions";
 import { Col, Row, Table } from "antd";
+import { AccountContext } from "../contexts/account.context";
 
 const getColumns = () => [
     {
@@ -57,10 +58,11 @@ export default function FavoritePage() {
 
     const [movieSessions, setMovieSessions] = useState([]);
     const [movies, setMovies] = useState([]);
+    const { isAuth, email } = useContext(AccountContext);
     const api = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        const storedMovies = LoadFavorite();
+        const storedMovies = LoadFavorite(isAuth, email);
         if (storedMovies.length > 0) {
 
             Promise.all(
@@ -73,7 +75,7 @@ export default function FavoritePage() {
             });
         }
 
-        const sessionsFavorite = LoadFavoriteSession();
+        const sessionsFavorite = LoadFavoriteSession(isAuth, email);
         if (sessionsFavorite.length > 0) {
 
             const sessionsLoad = loadSessions()
@@ -100,7 +102,7 @@ export default function FavoritePage() {
                                     </Col>
                                 ))}
                             </Row>
-                            : <p style={{ fontSize: 36, }}>Add your favorite movies here.</p>
+                            : <p style={{ fontSize: 36, textAlign: 'center' }}>Add your favorite movies here.</p>
                     }
                 </div>
             </div>
