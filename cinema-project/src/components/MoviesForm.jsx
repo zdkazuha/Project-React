@@ -74,7 +74,11 @@ const MoviesForm = () => {
 
   return (
     <>
-      <h2>{editMode ? "Edit Movies" : "Create New Movies"}</h2>
+
+      <hr />
+      <h1 className='header-text'>{editMode ? "Edit Movies" : "Create New Movies"}</h1>
+      <hr style={{ marginBottom: 50 }} />
+      
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}

@@ -23,7 +23,12 @@ const LoginForm = () => {
   return (
 
     <div style={{ textAlign: 'center' }}>
-      <h2>Login</h2>
+      
+      <hr />
+      <h1 className='header-text'>Login</h1>
+      <hr style={{ marginBottom: 50 }} />
+
+
       <Form
         name="basic"
         className='login-form'

@@ -36,6 +36,7 @@ const SessionsForm = () => {
           hall: session.hall,
           ageRestriction: session.ageRestriction,
           ticketPrice: session.ticketPrice,
+          ticketsAvailable: session.ticketsAvailable,
           releaseDate: dayjs(session.date),
           sessionTime: dayjs(session.time, 'HH:mm:ss')
         });
@@ -74,7 +75,11 @@ const SessionsForm = () => {
 
   return (
     <>
-      <h2>{editMode ? "Edit Session" : "Create New Session"}</h2>
+
+      <hr />
+      <h1 className='header-text'>{editMode ? "Edit Session" : "Create New Session"}</h1>
+      <hr style={{ marginBottom: 50 }} />
+
       <Form
         form={form}
         labelCol={{ span: 4 }}
@@ -141,6 +146,14 @@ const SessionsForm = () => {
           rules={[{ required: true, message: 'Please enter ticket price' }]}
         >
           <InputNumber placeholder="Ticket Price" />
+        </Form.Item>
+
+        <Form.Item
+          name="ticketsAvailable"
+          label="Tickets"
+          rules={[{ required: true, message: 'Please enter ticket available' }]}
+        >
+          <InputNumber placeholder="Tickets Available" />
         </Form.Item>
 
         <Form.Item

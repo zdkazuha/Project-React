@@ -19,7 +19,7 @@ export default function MovieCard({ movie }) {
         title={title}
         description={
           <>
-            <span className='rating'>{vote_average !== undefined ? vote_average.toFixed(1) : 0}</span>
+            <span className='gold'>{vote_average !== undefined ? vote_average.toFixed(1) : 0}</span>
             
             <br />
             

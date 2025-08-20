@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import MovieCard from './MovieCard'
-import { Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 
 export default function Home() {
-    const api = 'https://api.themoviedb.org/3/movie/popular?api_key=b507e73c6fb26fa0dcacca602b38a41e&language=en-US&page=1';
-
     const [movies, setMovies] = useState([]);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        fetchMovies();
-    }, []);
+        fetchMovies(page);
+    }, [page]);
 
-    async function fetchMovies() {
-
+    async function fetchMovies(page) {
+        const api = `https://api.themoviedb.org/3/movie/popular?api_key=b507e73c6fb26fa0dcacca602b38a41e&language=en-US&page=${page}`;
         const response = await fetch(api);
         const data = await response.json();
 
-        setMovies(data.results);
+        setMovies(prev => [...prev, ...data.results]);
+    }
+
+    function LoadMore() {
+        setPage(prev => prev + 1);
     }
 
     return (
-        <>
+        <div className='home'>
             <hr />
             <h1 className='header-text'>Welcome to Cinema project</h1>
             <hr style={{ marginBottom: 50 }} />
@@ -34,6 +37,10 @@ export default function Home() {
                     ))}
                 </Row>
             </div>
-        </>
+
+            <Button className='load-more' type="primary" onClick={LoadMore}  >Load more movies</Button>
+
+
+        </div>
     )
 }

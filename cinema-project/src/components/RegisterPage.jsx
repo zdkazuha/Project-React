@@ -12,12 +12,12 @@ const RegisterPage = () => {
 
     const onFinish = (values) => {
 
-        if (values.passwordFirst !== values.passwordSecond) {
+        if (values.passwordFirst !== values.passwordSecond || values.passwordFirst === "Adminpass01" || values.username === "Admin") {
             showToast("The passwords do not match!", "error");
             return;
         }
         showToast("You have successfully registered.", "success");
-        setEmail(values.username); 
+        setEmail(values.username);
 
         navigate('/');
     };
@@ -25,7 +25,11 @@ const RegisterPage = () => {
     return (
 
         <div style={{ textAlign: 'center' }}>
-            <h2>Register</h2>
+
+            <hr />
+            <h1 className='header-text'>Register</h1>
+            <hr style={{ marginBottom: 50 }} />
+            
             <Form
                 name="basic"
                 className='login-form'

@@ -10,7 +10,7 @@ export const AccountContext = createContext({
 
 export const AccountProvider = ({ children }) => {
 
-    const [email, setEmail] = useState("Admin");
+    const [email, setEmail] = useState(null);
 
     const clear = () => { setEmail(null); };
 

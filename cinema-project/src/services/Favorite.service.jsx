@@ -1,5 +1,7 @@
 const key_m = "movies_id";
 const key_s = "sesions_id";
+const key_t = "ticket_id";
+const keyTickets = "tickets_available";
 
 function LoadFavorite(isAuth, email) {
     const key_m_a = `${email}_account`;
@@ -64,7 +66,50 @@ function IsFavoriteSession(id, isAuth, email) {
     return sessions_localStorage.includes(Number(id));
 }
 
+// ------------------------------------------------ //
+
+function LoadTicket(isAuth, email) {
+    const key_t_a = `${email}_account_ticket`;
+    if (isAuth()) 
+        return JSON.parse(localStorage.getItem(key_t_a)) ?? []
+    else
+        return JSON.parse(localStorage.getItem(key_t)) ?? []
+}
+
+function UpdateTicket(id, isAuth, email) {
+    const key_t_a = `${email}_account_ticket`;
+    let ticket_localStorage = LoadTicket(isAuth, email);
+
+    id = Number(id); 
+
+    if (ticket_localStorage.includes(id)) 
+        ticket_localStorage = ticket_localStorage.filter(ticket => ticket !== id);
+    else 
+        ticket_localStorage.push(id);
+
+    if (isAuth()) 
+        localStorage.setItem(key_t_a, JSON.stringify(ticket_localStorage));
+    else
+        localStorage.setItem(key_t, JSON.stringify(ticket_localStorage));
+}
+
+function IsBookATicket(id, isAuth, email) {
+    const ticket_localStorage = LoadTicket(isAuth, email);
+    return ticket_localStorage.includes(Number(id));
+}
+
+// ------------------------------------------------ //
+
+function loadTickets() {
+    return JSON.parse(localStorage.getItem(keyTickets)) ?? [];
+}
+
+function saveTickets(tickets) {
+    localStorage.setItem(keyTickets, JSON.stringify(tickets));
+}
+
 export {
     UpdateLocalStorage, LoadFavorite, IsFavorite,
-    UpdateSessionLocalStorage, LoadFavoriteSession, IsFavoriteSession
+    UpdateSessionLocalStorage, LoadFavoriteSession, IsFavoriteSession,
+    LoadTicket, UpdateTicket, IsBookATicket, loadTickets, saveTickets
 };

@@ -3,7 +3,7 @@ import { Button, Space, Table, Tag, Popconfirm, Form, Select } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { useToast } from '../contexts/toast.context';
 import { genres, loadSessions } from '../services/MovieSessions';
-import { IsFavoriteSession, UpdateSessionLocalStorage } from '../services/Favorite.service';
+import { IsBookATicket, IsFavoriteSession, loadTickets, saveTickets, UpdateSessionLocalStorage, UpdateTicket } from '../services/Favorite.service';
 import { set } from 'react-hook-form';
 import { AccountContext } from '../contexts/account.context';
 
@@ -15,6 +15,7 @@ const SessionsPage = () => {
     const { showToast } = useToast()
     const { isAdmin, isAuth, email } = useContext(AccountContext);
     const [favoriteSessions, setFavoriteSessions] = useState([]);
+    const [reserveTicket, setReserveTicket] = useState([]);
 
     const DeleteSessions = (id) => {
         const updatedSession = movieSessions.filter(session => session.id !== id);
@@ -34,6 +35,45 @@ const SessionsPage = () => {
         showToast('Session favorite status updated', 'success');
     }
 
+    const toggleReserveTicket = (id) => {
+        const tickets = loadTickets();
+        const ticketInfo = tickets.find(t => t.id === id);
+
+        if (!ticketInfo || ticketInfo.ticketsAvailable === 0) {
+            showToast('Sorry, tickets are sold out!', 'error');
+            return;
+        }
+
+        UpdateTicket(id, isAuth, email);
+
+        setReserveTicket(prev => {
+            let updated;
+            let updatedTickets = tickets.map(t => {
+                if (t.id === id) {
+                    const newCount = prev.includes(id) ? t.ticketsAvailable + 1 : t.ticketsAvailable - 1;
+                    return { ...t, ticketsAvailable: newCount };
+                }
+                return t;
+            });
+
+            updated = prev.includes(id)
+                ? prev.filter(favId => favId !== id)
+                : [...prev, id];
+
+            saveTickets(updatedTickets);
+
+            setMovieSessions(sessions =>
+                sessions.map(s => {
+                    const t = updatedTickets.find(ticket => ticket.id === s.id);
+                    return t ? { ...s, ticketsAvailable: t.ticketsAvailable } : s;
+                })
+            );
+
+            return updated;
+        });
+
+        showToast('Ticket status updated', 'success');
+    };
 
     const setFilterOnChange = (value) => {
         setFilter(value);
@@ -66,11 +106,33 @@ const SessionsPage = () => {
     }, [filter, filterGenre]);
 
     useEffect(() => {
-        const favs = movieSessions
-            .filter(session => IsFavoriteSession(session.id, isAuth, email))
-            .map(s => s.id);
+        const favs = [];
+        const tickets = [];
+
+        movieSessions.forEach(session => {
+            if (IsFavoriteSession(session.id, isAuth, email)) favs.push(session.id);
+            if (IsBookATicket(session.id, isAuth, email)) tickets.push(session.id);
+        });
+
         setFavoriteSessions(favs);
+        setReserveTicket(tickets);
     }, [movieSessions]);
+
+
+    useEffect(() => {
+        const ticketsFromStorage = loadTickets();
+        if (ticketsFromStorage.length === 0) {
+            const initialTickets = movieSessions.map(s => ({ id: s.id, ticketsAvailable: s.ticketsAvailable }));
+            saveTickets(initialTickets);
+        } else {
+            setMovieSessions(prev => prev.map(s => {
+                const t = ticketsFromStorage.find(ticket => ticket.id === s.id);
+                return t ? { ...s, ticketsAvailable: t.ticketsAvailable } : s;
+            }));
+        }
+    }, []);
+
+
 
     const getColumns = () => [
         {
@@ -120,12 +182,20 @@ const SessionsPage = () => {
             key: 'ticketPrice',
         },
         {
+            title: 'Ticket',
+            dataIndex: 'ticketsAvailable',
+            key: 'ticketsAvailable',
+        },
+        {
             title: 'Actions',
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
 
-                    <Button type="primary" className={favoriteSessions.includes(record.id) ? "remove-favorites-sessions" : "add-favorites-sessions"}onClick={() => toggleFavoriteSessions(record.id)} >{favoriteSessions.includes(record.id) ? "Remove from favorites" : "Add to favorites"}</Button>
+                    <Button type="primary" className={favoriteSessions.includes(record.id) ? "remove-favorites-sessions" : "add-favorites-sessions"} onClick={() => toggleFavoriteSessions(record.id)} >{favoriteSessions.includes(record.id) ? "Remove from favorites" : "Add to favorites"}</Button>
+
+                    <Button type="primary" className={record.ticketsAvailable === 0 ? "remove-favorites-sessions" : reserveTicket.includes(record.id) ? "cancel-reservation" : "book-a-ticket"} onClick={() => toggleReserveTicket(record.id)} >{record.ticketsAvailable === 0 ? "Sold out" : reserveTicket.includes(record.id) ? "Remove from reserve ticket" : "Add to reserve ticket"}</Button>
+
 
                     <Link href={`edit_sessions/${record.id}`}>
                         <Button className={isAdmin() ? '' : 'hidden'} type="default">Edit</Button>

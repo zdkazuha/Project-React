@@ -29,11 +29,22 @@ body {
 
 /* Home  */
 
+.home {
+  text-align: center;
+}
+
 .cards {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 50px;
+}
+
+.load-more {
+  width: 250px;
+  text-align: center;
+  height: 40px;
+  font-size: 24px;
 }
 
 /* Layout  */
@@ -50,14 +61,20 @@ body {
 
 /* Movie Card */
 
-.card {
-  width: 260px;
-  height: 635px;
+.ant-card-meta-title {
+  white-space: normal !important;
+  word-break: break-word;
+  text-align: center; 
+  height: 45px;
 }
 
-.rating {
-  color: gold;
-  padding-left: 90px;
+.ant-card-meta-description {
+  text-align: center;
+}
+
+.card {
+  width: 260px;
+  height: 655px;
 }
 
 .movie-card {
@@ -127,8 +144,6 @@ body {
   margin-top: 20px;
 }
 
-/* Favorite Page */
-
 /* Search Movie Page */
 
 .movies-search-list {
@@ -172,6 +187,16 @@ body {
   width: 160px;
   background-color: red;
 }
+
+.book-a-ticket {
+  width: 170px;
+  background-color: green;
+}
+
+.cancel-reservation {
+  width: 170px;
+  background-color: red;
+} 
 
 /* Login Form */
 

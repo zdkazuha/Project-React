@@ -9,7 +9,8 @@ export let movieSession = [
     time: "19:00:00",
     hall: 1,
     ageRestriction: 12,
-    ticketPrice: 150
+    ticketPrice: 150,
+    ticketsAvailable: 1
   },
   {
     id: 2,
@@ -21,7 +22,8 @@ export let movieSession = [
     time: "21:30:00",
     hall: 1,
     ageRestriction: 14,
-    ticketPrice: 150
+    ticketPrice: 150,
+    ticketsAvailable: 60
   },
   {
     id: 3,
@@ -33,7 +35,8 @@ export let movieSession = [
     time: "18:00:00",
     hall: 2,
     ageRestriction: 16,
-    ticketPrice: 170
+    ticketPrice: 170,
+    ticketsAvailable: 55
   },
   {
     id: 4,
@@ -45,7 +48,8 @@ export let movieSession = [
     time: "20:30:00",
     hall: 2,
     ageRestriction: 16,
-    ticketPrice: 130
+    ticketPrice: 130,
+    ticketsAvailable: 40
   },
   {
     id: 5,
@@ -57,7 +61,8 @@ export let movieSession = [
     time: "19:00:00",
     hall: 3,
     ageRestriction: 12,
-    ticketPrice: 140
+    ticketPrice: 140,
+    ticketsAvailable: 50
   },
   {
     id: 6,
@@ -69,7 +74,8 @@ export let movieSession = [
     time: "21:30:00",
     hall: 3,
     ageRestriction: 16,
-    ticketPrice: 160
+    ticketPrice: 160,
+    ticketsAvailable: 60
   },
   {
     id: 7,
@@ -81,7 +87,8 @@ export let movieSession = [
     time: "18:00:00",
     hall: 1,
     ageRestriction: 12,
-    ticketPrice: 180
+    ticketPrice: 180,
+    ticketsAvailable: 45
   },
   {
     id: 8,
@@ -93,7 +100,8 @@ export let movieSession = [
     time: "21:00:00",
     hall: 2,
     ageRestriction: 14,
-    ticketPrice: 150
+    ticketPrice: 150,
+    ticketsAvailable: 55
   },
   {
     id: 9,
@@ -105,7 +113,8 @@ export let movieSession = [
     time: "19:00:00",
     hall: 3,
     ageRestriction: 12,
-    ticketPrice: 150
+    ticketPrice: 150,
+    ticketsAvailable: 50
   },
   {
     id: 10,
@@ -117,9 +126,11 @@ export let movieSession = [
     time: "21:30:00",
     hall: 1,
     ageRestriction: 18,
-    ticketPrice: 170
+    ticketPrice: 170,
+    ticketsAvailable: 40
   }
 ];
+
 
 export const genres = [
   "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime",
