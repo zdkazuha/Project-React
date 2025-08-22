@@ -6,11 +6,11 @@ import { AccountProvider } from './contexts/account.context.jsx'
 import { ToastProvider } from './contexts/toast.context.jsx'
 
 createRoot(document.getElementById('root')).render(
-  // <StrictMode>
+  <StrictMode>
     <AccountProvider>
       <ToastProvider>
         <App />
       </ToastProvider>
     </AccountProvider>
-  // </StrictMode>,
+  </StrictMode>,
 )

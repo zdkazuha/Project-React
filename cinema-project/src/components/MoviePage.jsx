@@ -12,7 +12,7 @@ export default function MoviesPage() {
     const { id } = useParams();
     const { isAuth, email } = useContext(AccountContext);
     const [isFav, setIsFav] = useState(false);
-
+console.log("EMAIL:", email);
 
     async function loadMovieData(id) {
 

@@ -68,7 +68,6 @@ const Layout = () => {
 
     const location = useLocation();
     const { email, isAuth } = useContext(AccountContext);
-
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();

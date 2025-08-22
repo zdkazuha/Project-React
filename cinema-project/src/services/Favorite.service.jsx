@@ -22,7 +22,7 @@ function UpdateLocalStorage(id, isAuth, email) {
     else 
         id_localStorage.push(id);
 
-    if (isAuth) 
+    if (isAuth()) 
         localStorage.setItem(key_m_a, JSON.stringify(id_localStorage));
     else
         localStorage.setItem(key_m, JSON.stringify(id_localStorage));
